@@ -259,6 +259,9 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
         
         [self addFrontViewControllerToHierarchy];
     }
+
+    // CHANGE: Make sure that the front controller is always the right size (especially after orientation changes)
+    _frontViewController.view.frame = _frontViewContainer.bounds;
 }
 
 - (void)setFrontViewController:(UIViewController *)frontViewController
