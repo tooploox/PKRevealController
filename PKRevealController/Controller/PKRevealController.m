@@ -300,6 +300,10 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
             [self addLeftViewControllerToHierarchy];
         }
     }
+    
+    CGRect leftVCFrame = _leftViewController.view.frame;
+    leftVCFrame.size.height = _frontViewContainer.bounds.size.width;
+    _leftViewController.view.frame = leftVCFrame;
 }
 
 - (void)setRightViewController:(UIViewController *)rightViewController
@@ -322,6 +326,10 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
             [self addRightViewControllerToHierarchy];
         }
     }
+    
+    CGRect rightVCFrame = _rightViewController.view.frame;
+    rightVCFrame.size.height = _frontViewContainer.bounds.size.width;
+    _rightViewController.view.frame = rightVCFrame;
 }
 
 - (PKRevealControllerType)type
