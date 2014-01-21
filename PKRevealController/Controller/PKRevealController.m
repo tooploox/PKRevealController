@@ -872,6 +872,15 @@ NSString * const PKRevealControllerRecognizesResetTapOnFrontViewKey = @"PKReveal
     return YES;
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if ([touch.view isKindOfClass:[UISlider class]]) {
+        // prevent recognizing touches on the slider
+        return NO;
+    }
+    return YES;
+}
+
 #pragma mark - Translation
 
 - (void)translateViewsBy:(CGFloat)delta animationType:(PKRevealControllerAnimationType)animationType
