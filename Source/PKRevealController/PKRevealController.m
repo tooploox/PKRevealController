@@ -264,7 +264,15 @@ typedef struct
 
 - (void)showViewController:(UIViewController *)controller
 {
-    [self showViewController:controller animated:YES completion:nil];
+    [self showViewController:controller
+                    animated:YES
+                  completion:^(BOOL finished) {
+                      if ([self isFrontViewEntirelyVisible]) {
+                          if (self.didShowFrontView) {
+                              self.didShowFrontView();
+                          }
+                      }
+                  }];
 }
 
 - (void)showViewController:(UIViewController *)controller
@@ -440,6 +448,15 @@ typedef struct
     }
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if ([touch.view isKindOfClass:[UISlider class]]) {
+        // prevent recognizing touches on the slider
+        return NO;
+    }
+    return YES;
+}
+
 - (void)setRightViewController:(UIViewController *)rightViewController
 {
     if (rightViewController != _rightViewController)
@@ -523,6 +540,11 @@ typedef struct
     return controller;
 }
 
+- (BOOL)isFrontViewEntirelyVisible
+{
+    return (CGRectGetMinX(self.frontView.frame)) == 0.0;
+}
+
 - (BOOL)isPresentationModeActive
 {
     return (self.state == PKRevealControllerShowsLeftViewControllerInPresentationMode ||
@@ -589,6 +611,9 @@ typedef struct
     
     self.revealResetTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                    action:@selector(didRecognizeTapGesture:)];
+    
+    self.revealPanGestureRecognizer.delegate = self;
+    self.revealResetTapGestureRecognizer.delegate = self;
     
     [self updatePanGestureRecognizerPresence];
     [self updateTapGestureRecognizerPrecence];
